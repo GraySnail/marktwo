@@ -1,4 +1,4 @@
-const CracoCSSModules = require('craco-css-modules');
+const CracoCSSModules = require('craco-css-modules')
 module.exports = {
-  plugins: [{ plugin: CracoCSSModules }]
-};
+  plugins: [{ plugin: CracoCSSModules }],
+}

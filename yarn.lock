@@ -11543,10 +11543,10 @@ typeface-roboto-slab@^1.1.13:
   resolved "https://artifact.inceptio.tech:443/artifactory/api/npm/npm/typeface-roboto-slab/-/typeface-roboto-slab-1.1.13.tgz#e2b76ea7f5114d8869f29ca39c1a5b8ded51aa77"
   integrity sha512-2oDTI2Z8GC/ijzhEXPYFA2EmF2Rm446skjY3gK56EzfVEX3BBgil1H9/ifqx9/IfBNwlqVoVs9Ez/g6zOhvC1Q==
 
-typescript@^5.4.5:
-  version "5.4.5"
-  resolved "https://artifact.inceptio.tech:443/artifactory/api/npm/npm/typescript/-/typescript-5.4.5.tgz#42ccef2c571fdbd0f6718b1d1f5e6e5ef006f611"
-  integrity sha512-vcI4UpRgg81oIRUFwR0WSIHKt11nJ7SAVlYNIu+QpqeyXP+gpQJy/Z4+F0aGxSE4MqwjyXvW/TzgkLAx2AGHwQ==
+typescript@4.0.3:
+  version "4.0.3"
+  resolved "https://artifact.inceptio.tech:443/artifactory/api/npm/npm/typescript/-/typescript-4.0.3.tgz#153bbd468ef07725c1df9c77e8b453f8d36abba5"
+  integrity sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"

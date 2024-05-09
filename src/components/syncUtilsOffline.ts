@@ -2,10 +2,14 @@ import async from 'async'
 import _ from 'lodash'
 import { get, set, del } from 'idb-keyval'
 
+
+
+export type CallbackFn = (err?:string|null|undefined, data?: any)=>any
+
 function initialize() {
-  function findOrFetch(name) {
+  function findOrFetch(name:string) {
     return new Promise(resolve => {
-      get(name).then(localVersion => {
+      get<string>(name).then(localVersion => {
         if (localVersion) {
           resolve(JSON.parse(localVersion))
         } else {
@@ -15,10 +19,10 @@ function initialize() {
     })
   }
 
-  function findOrFetchFiles(names) {
+  function findOrFetchFiles(names:string[]) {
     return async.series(
       names.map(name => {
-        return function (callback) {
+        return function (callback:CallbackFn) {
           findOrFetch(name).then(result => {
             if (result) {
               callback(null, result)
@@ -31,22 +35,18 @@ function initialize() {
     )
   }
 
-  function deleteFile(name) {
-    del(name)
+  function deleteFile(name:string) {
+    return del(name)
   }
 
-  function deleteFiles(names) {
+  function deleteFiles(names:string[]) {
     return async.series(
       names.map(name => {
-        return function (callback) {
+        return function (callback:CallbackFn) {
           deleteFile(name)
-            .then(result => {
+            .then( () => {
               setTimeout(() => {
-                if (!(result.status === 204)) {
-                  callback(`Delete request failed for ${name}`)
-                } else {
-                  callback()
-                }
+                callback()
               }, 100)
             })
             .catch(err => callback('Delete request failed'))
@@ -57,7 +57,7 @@ function initialize() {
 
   function initializeData(name, defaultData) {
     return new Promise(resolve => {
-      get(name).then(cachedData => {
+      get<string>(name).then(cachedData => {
         cachedData = cachedData && JSON.parse(cachedData)
         resolve(cachedData)
       })

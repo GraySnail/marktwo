@@ -32,7 +32,7 @@
     "typeface-roboto-slab": "^1.1.13"
   },
   "scripts": {
-    "start": "craco start",
+    "start": "NODE_OPTIONS=--openssl-legacy-provider craco start",
     "build": "craco build",
     "test": "craco test",
     "lint": "tsc --pretty && eslint . --ext ts --ext tsx --ext js",
@@ -52,6 +52,8 @@
   },
   "devDependencies": {
     "@craco/craco": "6.4.5",
+    "@types/async": "^3.2.24",
+    "@types/lodash": "^4.17.1",
     "@types/node": "^20.12.10",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",

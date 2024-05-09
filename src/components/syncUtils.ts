@@ -197,7 +197,7 @@ function initialize(gapi) {
     })
   }
 
-  function deleteFiles(names:string[]) {
+  function deleteFiles(names: string[]) {
     return async.series(
       names.map(name => {
         return function (callback) {

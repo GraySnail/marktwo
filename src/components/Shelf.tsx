@@ -3,22 +3,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes, faEllipsisV, faSearch, faFileAlt, faCog } from '@fortawesome/free-solid-svg-icons'
 import './Shelf.scss'
 import anonymous from '../img/anonymous.png'
+
 import user from '../img/user.png'
 import { set, get } from 'idb-keyval'
 
-
 interface ShelfProps {
-  tryItNow: string;
-  showShelf: boolean;
-
+  tryItNow: string
+  showShelf: boolean
 }
 
+interface UserInfo {
+  username: string
+  email: string
+  avatar: string
+}
 const Shelf: React.FC<ShelfProps> = ({ tryItNow, showShelf }) => {
-  const [userEmail, setUserEmail] = useState<string>('')
-  // const [userName, ]
+  const [userInfo, setUserInfo] = useState<UserInfo>()
 
   const getUserProfile = () => {
-
     if (this.props.gapi) {
       const profile = this.props.gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile()
       const userEmail = profile.getEmail()
@@ -33,9 +35,7 @@ const Shelf: React.FC<ShelfProps> = ({ tryItNow, showShelf }) => {
         })
       })
     }
-
   }
-
 
   return showShelf ? (
     <div className="m2-shelf">
@@ -91,7 +91,5 @@ const Shelf: React.FC<ShelfProps> = ({ tryItNow, showShelf }) => {
     </div>
   )
 }
-
-
 
 export default Shelf

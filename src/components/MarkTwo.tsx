@@ -3,6 +3,10 @@ import moment from 'moment'
 import Shelf from './Shelf'
 import Help from './Help'
 import About from './About'
+import SettingPanel from './SettingPanel'
+import SearchPanel from './SearchPanel'
+import DocListPanel from './DocListPanel'
+
 import shortid from 'shortid'
 import Doc from './Doc'
 import './MarkTwo.scss'
@@ -17,7 +21,6 @@ import _ from 'lodash'
 import $ from 'jquery'
 import { get, set } from 'idb-keyval'
 import me from '../img/me.jpg'
-import coffee from '../img/coffee.png'
 import { faBolt, faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 import 'typeface-roboto-slab'
 
@@ -371,285 +374,15 @@ class MarkTwo extends React.Component {
           showContact={() => this.setState({ showContact: true })}
         />
 
-        {this.state.showSearch && (
-          <div className="m2-search modal is-active">
-            <div
-              className="modal-background"
-              onClick={() => this.setState({ showSearch: false, searchString: '', searchResults: [] })}
-            ></div>
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <p className="modal-card-title">Search</p>
-                <button
-                  className="delete"
-                  aria-label="close"
-                  onClick={() => this.setState({ showSearch: false, searchString: '', searchResults: [] })}
-                ></button>
-              </header>
-              <section className="modal-card-body">
-                <form onSubmit={this.handleSearch}>
-                  <div className="field has-addons">
-                    <div className="control is-expanded">
-                      <input
-                        className="input is-fullwidth"
-                        type="search"
-                        placeholder="Search this doc"
-                        value={this.state.searchString}
-                        onChange={e => this.setState({ searchString: e.target.value })}
-                      />
-                    </div>
-                    <div className="control m2-search-button">
-                      <button type="submit" className="button is-primary">
-                        Search
-                      </button>
-                    </div>
-                  </div>
-                </form>
-                <div className="m2-search-results">
-                  {this.state.searchResults.length ? (
-                    this.state.searchResults.map(r => (
-                      <div
-                        key={r.id}
-                        className="m2-search-result"
-                        onClick={() =>
-                          this.setState({
-                            goToBlock: r.id,
-                            showSearch: false,
-                            searchString: '',
-                            searchResults: [],
-                            showShelf: false,
-                          })
-                        }
-                        dangerouslySetInnerHTML={{ __html: r.html }}
-                      ></div>
-                    ))
-                  ) : (
-                    <p>
-                      <em>Didn't find anything...</em>
-                    </p>
-                  )}
-                </div>
-              </section>
-            </div>
-          </div>
-        )}
+        {this.state.showSearch && <SearchPanel />}
 
-        {this.state.showDocs && (
-          <div className="m2-docs modal is-active">
-            <div className="modal-background" onClick={() => this.setState({ showDocs: false })}></div>
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <p className="modal-card-title">Docs</p>
-                <button
-                  className="delete"
-                  aria-label="close"
-                  onClick={() => this.setState({ showDocs: false })}
-                ></button>
-              </header>
-              <section className="modal-card-body">
-                <div>
-                  <label className="m2-import">
-                    <span className="button is-text is-clear" disabled={this.state.offlineMode}>
-                      Import
-                    </span>
-                    <input
-                      type="file"
-                      onChange={this.handleImport}
-                      accept=".txt,.md"
-                      disabled={this.state.offlineMode}
-                    />
-                  </label>
-                  <button className="button is-outline" onClick={this.startNewFile} disabled={this.state.offlineMode}>
-                    New
-                  </button>
-                </div>
-                <table className="table is-striped is-fullwidth">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th>
-                        <abbr title="Filename">Filename</abbr>
-                      </th>
-                      <th>
-                        <abbr title="Last modified">Last modified</abbr>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.docs &&
-                      this.state.docs
-                        .filter(f => !!f.archived == this.state.viewArchive)
-                        .map(f => (
-                          <tr key={f.id}>
-                            <td>
-                              <div className="select">
-                                <select value={'default'} onChange={e => this.takeFileAction(e, f)}>
-                                  <option hidden value="default"></option>
-                                  <option value="rename">Rename</option>
-                                  {f.id === this.state.currentDoc && <option value="export">Export</option>}
-                                  <option value="toggleArchive">{!f.archived ? 'Archive' : 'Move to docs'}</option>
-                                  <option value="delete">Delete</option>
-                                </select>
-                              </div>
-                            </td>
-                            <td className={f.id === this.state.currentDoc ? 'm2-is-current-doc' : undefined}>
-                              <a onClick={() => this.openFile(f.id)}>
-                                {f.title ? <abbr title={f.title}>{f.title.substring(0, 20)}</abbr> : 'Untitled'}
-                              </a>
-                            </td>
-                            <td>{moment(f.lastModified).fromNow()}</td>
-                          </tr>
-                        ))}
-                  </tbody>
-                </table>
-                <div className="m2-footer">
-                  <a onClick={() => this.setState({ viewArchive: !this.state.viewArchive })}>
-                    {this.state.viewArchive ? 'View docs' : 'View archive'}
-                  </a>
-                </div>
-              </section>
-            </div>
-          </div>
-        )}
+        {this.state.showDocs && <DocListPanel />}
 
-        {this.state.showSettings && (
-          <div className="m2-settings modal is-active">
-            <div className="modal-background" onClick={() => this.setState({ showSettings: false })}></div>
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <p className="modal-card-title">Settings</p>
-                <button
-                  className="delete"
-                  aria-label="close"
-                  onClick={() => this.setState({ showSettings: false })}
-                ></button>
-              </header>
-              <section className="modal-card-body">
-                <div className="field">
-                  <input
-                    id="m2-dark-mode-switch"
-                    type="checkbox"
-                    name="m2-dark-mode-switch"
-                    className="switch"
-                    checked={this.state.darkMode}
-                    onChange={e => this.setDarkMode(e.target.checked)}
-                  />
-                  <label htmlFor="m2-dark-mode-switch">Dark mode</label>
-                </div>
-
-                <div className="field">
-                  <input
-                    id="m2-offline-mode-switch"
-                    type="checkbox"
-                    name="m2-offline-mode-switch"
-                    className="switch"
-                    checked={this.state.offlineMode}
-                    onChange={e => this.setOfflineMode(e.target.checked)}
-                  />
-                  <label htmlFor="m2-offline-mode-switch">
-                    Offline mode <FontAwesomeIcon icon={faBolt} />
-                  </label>
-                </div>
-
-                <div className="field">
-                  <input
-                    id="m2-spellcheck-switch"
-                    type="checkbox"
-                    name="m2-spellcheck-switch"
-                    className="switch"
-                    checked={this.state.spellcheck}
-                    onChange={e => this.setSpellcheck(e.target.checked)}
-                  />
-                  <label htmlFor="m2-spellcheck-switch">Spellcheck</label>
-                </div>
-
-                <div className="field">
-                  <input
-                    id="m2-serif-switch"
-                    type="checkbox"
-                    name="m2-serif-switch"
-                    className="switch"
-                    checked={this.state.serif}
-                    onChange={e => this.setSerif(e.target.checked)}
-                  />
-                  <label htmlFor="m2-serif-switch">Serif font</label>
-                </div>
-
-                <div className="field">
-                  <p>
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    &nbsp;&nbsp;Images you upload via <code>/image</code> are served out of your Google Drive{' '}
-                    <a onClick={this.handleViewImageFolder}>here</a>.
-                  </p>
-                </div>
-              </section>
-            </div>
-          </div>
-        )}
-
-        {this.state.showContact && (
-          <div className="m2-contact modal is-active">
-            <div className="modal-background" onClick={() => this.setState({ showContact: false })}></div>
-            <div className="modal-card">
-              <header className="modal-card-head">
-                <p className="modal-card-title">Thanks for reaching out!</p>
-                <button
-                  className="delete"
-                  aria-label="close"
-                  onClick={() => this.setState({ showContact: false })}
-                ></button>
-              </header>
-              <section className="modal-card-body">
-                <p>
-                  I welcome bug reports, feature requests, questions, comments, complaints, gossip, tirades, manifestos,
-                  rants, and much more. I&apos;ll do my best to get back to you within two business days.
-                </p>
-                <br />
-                <form name="m2-contact" method="post" action="/submitted">
-                  <input type="hidden" name="form-name" value="m2-contact" />
-
-                  <div className="field">
-                    <label className="label">Name</label>
-                    <div className="control">
-                      <input className="input" type="text" placeholder="Your name..." name="name" />
-                    </div>
-                  </div>
-
-                  <div className="field">
-                    <label className="label">Email</label>
-                    <div className="control">
-                      <input className="input" type="email" placeholder="your@email.com" name="email" />
-                    </div>
-                  </div>
-
-                  <div className="field">
-                    <label className="label">Message</label>
-                    <div className="control">
-                      <textarea className="textarea" placeholder="Your message..." name="message"></textarea>
-                    </div>
-                  </div>
-
-                  <div className="field is-grouped">
-                    <div className="control">
-                      <button type="submit" className="button is-link">
-                        Submit
-                      </button>
-                    </div>
-                    <div className="control">
-                      <button className="button is-text" onClick={() => this.setState({ showContact: false })}>
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </section>
-            </div>
-          </div>
-        )}
+        {this.state.showSettings && <SettingPanel />}
 
         {this.state.showAbout && <About></About>}
 
-        {this.state.showHelp && <Help visable={this.state.showHelp}  />}
+        {this.state.showHelp && <Help visable={this.state.showHelp} />}
       </div>
     )
   }

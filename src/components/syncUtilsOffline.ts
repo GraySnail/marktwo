@@ -2,12 +2,10 @@ import async from 'async'
 import _ from 'lodash'
 import { get, set, del } from 'idb-keyval'
 
-
-
-export type CallbackFn = (err?:string|null|undefined, data?: any)=>any
+export type CallbackFn = (err?: string | null | undefined, data?: any) => any
 
 function initialize() {
-  function findOrFetch(name:string) {
+  function findOrFetch(name: string) {
     return new Promise(resolve => {
       get<string>(name).then(localVersion => {
         if (localVersion) {
@@ -19,10 +17,10 @@ function initialize() {
     })
   }
 
-  function findOrFetchFiles(names:string[]) {
+  function findOrFetchFiles(names: string[]) {
     return async.series(
       names.map(name => {
-        return function (callback:CallbackFn) {
+        return function (callback: CallbackFn) {
           findOrFetch(name).then(result => {
             if (result) {
               callback(null, result)
@@ -35,16 +33,16 @@ function initialize() {
     )
   }
 
-  function deleteFile(name:string) {
+  function deleteFile(name: string) {
     return del(name)
   }
 
-  function deleteFiles(names:string[]) {
+  function deleteFiles(names: string[]) {
     return async.series(
       names.map(name => {
-        return function (callback:CallbackFn) {
+        return function (callback: CallbackFn) {
           deleteFile(name)
-            .then( () => {
+            .then(() => {
               setTimeout(() => {
                 callback()
               }, 100)

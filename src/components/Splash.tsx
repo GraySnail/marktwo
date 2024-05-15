@@ -9,7 +9,11 @@ import $script from 'scriptjs'
 import './Splash.scss'
 import logo from '../img/logo512.png'
 
-export default function Splash({}) {
+export interface SlashOptions {
+  //
+}
+
+export default function Splash(props: SlashOptions) {
   const [tryItNow, setTryItNow] = useState<boolean>(document.location.pathname.startsWith('/try-it-now'))
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
   const [userEmail, setUserEmail] = useState<string>('')
@@ -17,45 +21,45 @@ export default function Splash({}) {
 
   Error.stackTraceLimit = 100
 
-  useLayoutEffect(() => {
-    $script('https://apis.google.com/js/client.js', () => {
-      const gapi = window.gapi
-      if (gapi) {
-        gapi.load('client:auth2', () => {
-          const initSettings = {
-            client_id: '346746556737-32h3br6e6beeerm71norabl2icv4rl7e.apps.googleusercontent.com',
-            scope:
-              'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata',
-            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-            response_type: 'id_token permission',
-          }
-          //  setState({ isAuthenticated, gapi, userEmail })
+  // useLayoutEffect(() => {
+  //   $script('https://apis.google.com/js/client.js', () => {
+  //     const gapi = window.gapi
+  //     if (gapi) {
+  //       gapi.load('client:auth2', () => {
+  //         const initSettings = {
+  //           client_id: '346746556737-32h3br6e6beeerm71norabl2icv4rl7e.apps.googleusercontent.com',
+  //           scope:
+  //             'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/drive.appdata',
+  //           discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+  //           response_type: 'id_token permission',
+  //         }
+  //         //  setState({ isAuthenticated, gapi, userEmail })
 
-          gapi.client.init(initSettings).then(() => {
-            const isAuthenticated = gapi.auth2.getAuthInstance().isSignedIn.get()
-            setIsAuthenticated(isAuthenticated)
+  //         gapi.client.init(initSettings).then(() => {
+  //           const isAuthenticated = gapi.auth2.getAuthInstance().isSignedIn.get()
+  //           setIsAuthenticated(isAuthenticated)
 
-            if (isAuthenticated) {
-              try {
-                window.gtag('event', 'login', { method: 'Google' })
-              } catch {}
-              const userEmail = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail()
-              setUserEmail(userEmail)
+  //           if (isAuthenticated) {
+  //             try {
+  //               window.gtag('event', 'login', { method: 'Google' })
+  //             } catch {}
+  //             const userEmail = gapi.auth2.getAuthInstance().currentUser.get().getBasicProfile().getEmail()
+  //             setUserEmail(userEmail)
 
-              set('userEmail', userEmail)
-            } else {
-            }
-          })
-        })
-      } else {
-        get('userEmail').then(userEmail => {
-          setIsAuthenticated(true)
-          setOfflineMode(true)
-          setUserEmail(userEmail as string)
-        })
-      }
-    })
-  }, [])
+  //             set('userEmail', userEmail)
+  //           } else {
+  //           }
+  //         })
+  //       })
+  //     } else {
+  //       get('userEmail').then(userEmail => {
+  //         setIsAuthenticated(true)
+  //         setOfflineMode(true)
+  //         setUserEmail(userEmail as string)
+  //       })
+  //     }
+  //   })
+  // }, [])
 
   const handleLogin = () => {
     try {
@@ -166,7 +170,7 @@ export default function Splash({}) {
 
   return (
     <div>
-      {tryItNow && (
+      {/* {tryItNow && (
         <MarkTwo
           gapi={gapi}
           handleLogout={() => (window.location.href = '/')}
@@ -187,7 +191,7 @@ export default function Splash({}) {
           tryItNow={false}
           offlineMode={offlineMode}
         />
-      )}
+      )} */}
       {!tryItNow && isAuthenticated === null && <AppLoading />}
       {!tryItNow && isAuthenticated === false && <AppHome />}
     </div>

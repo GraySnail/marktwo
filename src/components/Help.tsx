@@ -1,23 +1,31 @@
 import React, { useState, useEffect } from 'react'
 
-interface HelpOptions {
-  visable?: boolean
-}
+import Modal from './Modal'
 
-const Help: React.FC<HelpOptions> = ({ visable } = { visable: false }) => {
-  const onClose = () => {
-    visable = false
+interface HelpOptions {}
+
+const Help: React.FC<HelpOptions> = (props: HelpOptions) => {
+  const [visible, setVisible] = useState<boolean>(false)
+
+  const openHelp = () => {
+    setVisible(true)
+  }
+  const closeHelp = () => {
+    setVisible(false)
   }
 
   return (
-    <div className="m2-help modal is-active">
-      <div className="modal-background" onClick={onClose}></div>
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">Help</p>
-          <button className="delete" aria-label="close" onClick={onClose}></button>
-        </header>
-        <section className="modal-card-body content">
+    <React.Fragment>
+      <a onClick={openHelp}>Help</a>
+      <Modal
+        visible={visible}
+        header={'Help'}
+        onCancle={closeHelp}
+        className="m2-help"
+        bodyClass="content"
+        footer={null}
+      >
+        <div>
           <h2>General notes</h2>
           <p>Thanks for using MarkTwo!</p>
           <ul>
@@ -150,9 +158,9 @@ And underlined text <u>like this</u>
           <p>
             <br />
           </p>
-        </section>
-      </div>
-    </div>
+        </div>
+      </Modal>
+    </React.Fragment>
   )
 }
 

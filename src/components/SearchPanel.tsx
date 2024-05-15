@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Modal from './Modal'
 
 export interface SeachOptions {}
 const SearchPanel: React.FC<SeachOptions> = ({}) => {

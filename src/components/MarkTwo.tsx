@@ -1,8 +1,6 @@
 import React from 'react'
 import moment from 'moment'
 import Shelf from './Shelf'
-import Help from './Help'
-import About from './About'
 import SettingPanel from './SettingPanel'
 import SearchPanel from './SearchPanel'
 import DocListPanel from './DocListPanel'
@@ -368,10 +366,7 @@ class MarkTwo extends React.Component {
           setShelf={val => this.setState({ showShelf: val })}
           showDocs={val => this.setState({ showDocs: val, viewArchive: false }, this.refreshDocs)}
           showSearch={() => this.setState({ showSearch: true }, () => this.handleSearch({ preventDefault: () => {} }))}
-          showAbout={() => this.setState({ showAbout: true })}
-          showHelp={() => this.setState({ showHelp: true })}
           showSettings={() => this.setState({ showSettings: true })}
-          showContact={() => this.setState({ showContact: true })}
         />
 
         {this.state.showSearch && <SearchPanel />}
@@ -379,10 +374,6 @@ class MarkTwo extends React.Component {
         {this.state.showDocs && <DocListPanel />}
 
         {this.state.showSettings && <SettingPanel />}
-
-        {this.state.showAbout && <About></About>}
-
-        {this.state.showHelp && <Help visable={this.state.showHelp} />}
       </div>
     )
   }

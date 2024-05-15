@@ -6,6 +6,9 @@ import anonymous from '../img/anonymous.png'
 
 import user from '../img/user.png'
 import { set, get } from 'idb-keyval'
+import Contact from './Contact'
+import About from './About'
+import Help from './Help'
 
 interface ShelfProps {
   tryItNow: string
@@ -75,9 +78,9 @@ const Shelf: React.FC<ShelfProps> = ({ tryItNow, showShelf }) => {
         </div>
       </div>
       <div className="m2-menu-footer">
-        <a onClick={this.props.showContact}>Contact</a>
-        <a onClick={this.props.showHelp}>Help</a>
-        <a onClick={this.props.showAbout}>About</a>
+        <Contact />
+        <Help />
+        <About />
       </div>
       <a className="m2-close" onClick={() => this.props.setShelf(false)}>
         <FontAwesomeIcon icon={faTimes} />
